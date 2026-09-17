@@ -14,7 +14,7 @@ UNIT="knx-bridge.service"
 REPO="${REPO:-ehive-dev/KNXBridge_releases}"
 TAG="${TAG:-}"
 ARCH_REQ="arm64"
-PORT="${PORT:-3032}"
+APP_PORT="${KNX_BRIDGE_PORT:-3032}"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -101,9 +101,9 @@ fi
 
 systemctl enable --now "$UNIT"
 for _ in {1..30}; do
-  if curl -fsS "http://127.0.0.1:${PORT}/healthz" >/dev/null; then
+  if curl -fsS "http://127.0.0.1:${APP_PORT}/healthz" >/dev/null; then
     installed="$(dpkg-query -W -f='${Version}' "$APP_NAME")"
-    ok "KNX Bridge ${installed} läuft auf Port ${PORT}."
+    ok "KNX Bridge ${installed} läuft auf Port ${APP_PORT}."
     exit 0
   fi
   sleep 1
